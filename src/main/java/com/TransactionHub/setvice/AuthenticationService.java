@@ -50,7 +50,7 @@ public class AuthenticationService {
 
         User user = User.builder()
                 .username(request.getUsername())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .bankAccount(new BankAccount(request.getAmount()))
                 .fullName(request.getFullName())
                 .birthday(request.getBirthday())
