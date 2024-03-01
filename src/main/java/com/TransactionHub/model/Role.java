@@ -1,17 +1,21 @@
 package com.TransactionHub.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -29,12 +33,4 @@ public class Role implements GrantedAuthority {
         return getName();
     }
 
-    public Role(Integer id) {
-        this.id = id;
-    }
-
-    public Role(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

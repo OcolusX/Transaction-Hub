@@ -33,10 +33,10 @@ public class AuthenticationService {
     private RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, String> hashOperations;
 
-    @PostConstruct
-    private void initializeHashOperations() {
-        hashOperations = redisTemplate.opsForHash();
-    }
+//    @PostConstruct
+//    private void initializeHashOperations() {
+//        hashOperations = redisTemplate.opsForHash();
+//    }
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
         Set<PhoneNumber> phoneNumbers = new HashSet<>();
@@ -63,7 +63,7 @@ public class AuthenticationService {
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-        hashOperations.put(USER_REFRESH_TOKEN_CACHE, user.getUsername(), refreshToken);
+//        hashOperations.put(USER_REFRESH_TOKEN_CACHE, user.getUsername(), refreshToken);
 
         return new JwtAuthenticationResponse(accessToken, refreshToken);
     }
@@ -80,7 +80,7 @@ public class AuthenticationService {
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-        hashOperations.put(USER_REFRESH_TOKEN_CACHE, user.getUsername(), refreshToken);
+//        hashOperations.put(USER_REFRESH_TOKEN_CACHE, user.getUsername(), refreshToken);
 
         return new JwtAuthenticationResponse(accessToken, refreshToken);
     }

@@ -23,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    public static final String BEARER_PREFIX = "Bearer";
+    public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
     private final UserService userService;
@@ -40,15 +40,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = header.substring(BEARER_PREFIX.length());
-        String jwt = jwtService.getAccessClaims(token).getSubject();
+        String jwt = header.substring(BEARER_PREFIX.length());
+        String username = jwtService.getAccessClaims(jwt).getSubject();
 
-        if(StringUtils.isNotEmpty(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if(StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService
                     .userDetailsService()
-                    .loadUserByUsername(jwt);
+                    .loadUserByUsername(username);
 
-            if(jwtService.validateAccessToken(token)) {
+            if(jwtService.validateAccessToken(jwt)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
