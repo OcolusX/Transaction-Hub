@@ -17,5 +17,7 @@ public class BankAccount {
     @Column(name = "amount", columnDefinition = "NUMERIC", nullable = false)
     private BigDecimal amount;
 
-
+    public BankAccount(BigDecimal amount) {
+        this.amount = amount;
+    }
 }

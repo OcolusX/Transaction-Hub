@@ -1,15 +1,19 @@
 package com.TransactionHub.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 
 @Data
+@Builder
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -22,7 +26,7 @@ public class User implements UserDetails {
     private String fullName;
 
     @Column(name = "birthday", columnDefinition = "DATE", nullable = false)
-    private LocalDate birthday;
+    private Date birthday;
 
     @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String username;

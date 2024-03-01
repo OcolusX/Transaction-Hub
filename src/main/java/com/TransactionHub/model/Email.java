@@ -1,7 +1,9 @@
 package com.TransactionHub.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "emails")
 public class Email {
@@ -13,4 +15,7 @@ public class Email {
     @Column(name = "email", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String email;
 
+    public Email(String email) {
+        this.email = email;
+    }
 }
