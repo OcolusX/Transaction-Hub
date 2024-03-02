@@ -5,7 +5,6 @@ import com.TransactionHub.model.Email;
 import com.TransactionHub.model.PhoneNumber;
 import com.TransactionHub.model.User;
 import com.TransactionHub.repository.UserRepository;
-import com.TransactionHub.service.UserService;
 import com.TransactionHub.specification.UserSpecification;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -49,7 +47,8 @@ public class SearchUserController {
                     .map(PhoneNumber::getNumber)
                     .reduce(((s1, s2) -> s1 + ", " + s2))
                     .get());
-            info.put("birthDay", user.getBirthday().toString());
+            info.put("birthday", user.getBirthday().toString());
+            info.put("bankAccountUUID", user.getBankAccount().getId().toString());
             users.put(user.getFullName(), info);
         }
         return users;

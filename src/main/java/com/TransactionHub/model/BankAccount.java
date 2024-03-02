@@ -18,10 +18,14 @@ public class BankAccount {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "amount", columnDefinition = "NUMERIC", nullable = false)
-    private BigDecimal amount;
+    @Column(name = "initial_amount", columnDefinition = "NUMERIC", nullable = false)
+    private BigDecimal initialAmount;
 
-    public BankAccount(BigDecimal amount) {
-        this.amount = amount;
+    @Column(name = "current_amount", columnDefinition = "NUMERIC", nullable = false)
+    private BigDecimal currentAmount;
+
+    public BankAccount(BigDecimal initial_amount) {
+        this.initialAmount = initial_amount;
+        this.currentAmount = initial_amount;
     }
 }
