@@ -1,6 +1,6 @@
 package com.TransactionHub.rest;
 
-import com.TransactionHub.setvice.UserService;
+import com.TransactionHub.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

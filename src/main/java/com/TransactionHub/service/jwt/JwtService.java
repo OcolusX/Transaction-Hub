@@ -1,4 +1,4 @@
-package com.TransactionHub.setvice;
+package com.TransactionHub.service.jwt;
 
 import com.TransactionHub.model.User;
 import io.jsonwebtoken.*;
@@ -9,15 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
 
 @Service
 public class JwtService {
@@ -37,7 +33,7 @@ public class JwtService {
         final Date expiration = Date.from(now.plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant());
 
         Map<String, Object> claims = new HashMap<>();
-        if(userDetails instanceof User customUserDetails) {
+        if (userDetails instanceof User customUserDetails) {
             claims.put("fullName", customUserDetails.getFullName());
             claims.put("roles", customUserDetails.getRoles());
         }
@@ -71,22 +67,11 @@ public class JwtService {
     }
 
     private boolean validateToken(String token, SecretKey secret) {
-        try {
-            Jwts.parser()
-                    .verifyWith(secret)
-                    .build()
-                    .parseSignedClaims(token);
-            return true;
-        } catch (ExpiredJwtException expEx) {
-            System.out.println("Token expired " + expEx);
-        } catch (UnsupportedJwtException unsEx) {
-            System.out.println("Unsupported jwt " + unsEx);
-        } catch (MalformedJwtException mjEx) {
-            System.out.println("Malformed jwt " + mjEx);
-        }  catch (Exception e) {
-            System.out.println("invalid token " + e);
-        }
-        return false;
+        Jwts.parser()
+                .verifyWith(secret)
+                .build()
+                .parseSignedClaims(token);
+        return true;
     }
 
     public Claims getAccessClaims(String token) {

@@ -42,11 +42,11 @@ public class User implements UserDetails {
     @JoinColumn(name = "bank_account_id", referencedColumnName = "id", nullable = false)
     private BankAccount bankAccount;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private Set<PhoneNumber> phoneNumbers;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private Set<Email> emails;
 

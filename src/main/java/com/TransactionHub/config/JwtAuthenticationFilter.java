@@ -1,7 +1,7 @@
 package com.TransactionHub.config;
 
-import com.TransactionHub.setvice.JwtService;
-import com.TransactionHub.setvice.UserService;
+import com.TransactionHub.service.jwt.JwtService;
+import com.TransactionHub.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

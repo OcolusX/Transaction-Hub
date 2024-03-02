@@ -1,6 +1,6 @@
 package com.TransactionHub.config;
 
-import com.TransactionHub.setvice.UserService;
+import com.TransactionHub.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

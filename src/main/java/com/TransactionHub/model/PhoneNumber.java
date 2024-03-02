@@ -16,7 +16,7 @@ public class PhoneNumber {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "number", columnDefinition = "VARCHAR(11)", unique = true, nullable = false)
+    @Column(name = "number", columnDefinition = "VARCHAR(12)", unique = true, nullable = false)
     private String number;
 
     public PhoneNumber(String number) {

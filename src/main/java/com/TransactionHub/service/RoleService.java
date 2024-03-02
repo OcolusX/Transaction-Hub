@@ -1,12 +1,9 @@
-package com.TransactionHub.setvice;
+package com.TransactionHub.service;
 
 import com.TransactionHub.model.Role;
 import com.TransactionHub.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.management.relation.RoleInfoNotFoundException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

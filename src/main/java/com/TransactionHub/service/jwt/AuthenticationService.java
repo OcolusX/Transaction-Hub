@@ -1,17 +1,16 @@
-package com.TransactionHub.setvice;
+package com.TransactionHub.service.jwt;
 
-import com.TransactionHub.dto.JwtAuthenticationResponse;
-import com.TransactionHub.dto.SignInRequest;
-import com.TransactionHub.dto.SignUpRequest;
+import com.TransactionHub.dto.jwt.JwtAuthenticationResponse;
+import com.TransactionHub.dto.sign.SignInRequest;
+import com.TransactionHub.dto.sign.SignUpRequest;
 import com.TransactionHub.model.*;
-import jakarta.annotation.PostConstruct;
+import com.TransactionHub.repository.redis.TokenRepository;
+import com.TransactionHub.service.RoleService;
+import com.TransactionHub.service.UserService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +26,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
-    private final String USER_REFRESH_TOKEN_CACHE = "USER_REFRESH_TOKEN";
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-    private HashOperations<String, String, String> hashOperations;
-
-//    @PostConstruct
-//    private void initializeHashOperations() {
-//        hashOperations = redisTemplate.opsForHash();
-//    }
+    private final TokenRepository refreshTokenRepository;
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
         Set<PhoneNumber> phoneNumbers = new HashSet<>();
@@ -63,7 +53,7 @@ public class AuthenticationService {
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-//        hashOperations.put(USER_REFRESH_TOKEN_CACHE, user.getUsername(), refreshToken);
+        refreshTokenRepository.add(user.getUsername(), refreshToken);
 
         return new JwtAuthenticationResponse(accessToken, refreshToken);
     }
@@ -80,9 +70,25 @@ public class AuthenticationService {
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-//        hashOperations.put(USER_REFRESH_TOKEN_CACHE, user.getUsername(), refreshToken);
+        refreshTokenRepository.add(user.getUsername(), refreshToken);
 
         return new JwtAuthenticationResponse(accessToken, refreshToken);
+    }
+
+    public JwtAuthenticationResponse refresh(String refreshToken) {
+        if (jwtService.validateRefreshToken(refreshToken)) {
+            Claims refreshClaims = jwtService.getRefreshClaims(refreshToken);
+            String username = refreshClaims.getSubject();
+            String saveRefreshToken = refreshTokenRepository.get(username);
+            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
+                User user = userService.getByUsername(username);
+                String accessToken = jwtService.generateAccessToken(user);
+                String newRefreshToken = jwtService.generateRefreshToken(user);
+                refreshTokenRepository.add(username, newRefreshToken);
+                return new JwtAuthenticationResponse(accessToken, refreshToken);
+            }
+        }
+        return new JwtAuthenticationResponse(null, null);
     }
 
 
